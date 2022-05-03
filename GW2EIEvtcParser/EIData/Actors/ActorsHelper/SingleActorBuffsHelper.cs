@@ -184,8 +184,33 @@ namespace GW2EIEvtcParser.EIData
                 {
                     continue;
                 }
-                Buff buff = log.Buffs.BuffsByIds[buffID];
-                _buffMap.Add(log, buff, buffEvent);
+                var DragonsEndContributorIDs = new Dictionary<long, int>()
+                {
+                    {65384, 1},
+                    {66185, 2},
+                    {64250, 3},
+                    {64924, 4},
+                    {66589, 5},
+                    {67352, 6},
+                    {67549, 7},
+                    {64623, 8},
+                    {67046, 9},
+                    {63928, 10},
+                };
+                Buff buff;
+                if (DragonsEndContributorIDs.Keys.Contains(buffEvent.BuffID)) //if current buff is one of the DragonsEndContributor buffs, then set buff to custom buff instead
+                {
+                    buff = log.Buffs.BuffsByIds[SkillIDs.DragonsEndContributor]; //custom buff
+                    for (int i = 0; i < DragonsEndContributorIDs[buffEvent.BuffID]; i++) //add custom buff multiple times to simulate number of stacks
+                    {
+                        _buffMap.Add(log, buff, buffEvent);
+                    }
+                }
+                else //else just add buff as usual
+                {
+                    buff = log.Buffs.BuffsByIds[buffID];
+                    _buffMap.Add(log, buff, buffEvent);
+                }
             }
             _buffMap.Finalize(log, Actor.AgentItem, out _trackedBuffs);
         }
