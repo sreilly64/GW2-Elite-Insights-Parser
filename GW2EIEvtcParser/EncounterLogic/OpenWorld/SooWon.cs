@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
                 log.FightData.FightEnd));
 
             var phaseOffset = GetPhaseOffset(log, mainTarget);
-            InitPhases(phases, mainTarget, tailTarget, phaseOffset);
+            InitPhases(log, phases, mainTarget, tailTarget, phaseOffset);
 
             return phases;
         }
@@ -123,9 +123,10 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
             return offset;
         }
 
-        private void InitPhases(List<PhaseData> phases, AbstractSingleActor mainTarget,
+        private void InitPhases(ParsedEvtcLog log, List<PhaseData> phases, AbstractSingleActor mainTarget,
             AbstractSingleActor tailTarget, int phaseOffset)
         {
+            BreakbarStateEvent spearBreakbar = null;
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -147,12 +148,16 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
                     case 4:
                         phase.Name = "First Spear";
                         phase.AddTarget(mainTarget);
+                        
+                        spearBreakbar = FixSpearPhase(log, mainTarget, phase);
                         break;
                     case 5:
                         phase.Name = "First Champions";
                         phase.AddTargets(Targets.Where(x =>
                             x.ID == (int)ArcDPSEnums.TrashID.VoidGiant2 ||
                             x.ID == (int)ArcDPSEnums.TrashID.VoidTimeCaster2));
+                        
+                        FixChampionPhase(phase, spearBreakbar);
                         break;
                     case 6:
                         phase.Name = "60% - 40%";
@@ -171,6 +176,8 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
                     case 9:
                         phase.Name = "Second Spear";
                         phase.AddTarget(mainTarget);
+
+                        spearBreakbar = FixSpearPhase(log, mainTarget, phase);
                         break;
                     case 10:
                         phase.Name = "Second Champions";
@@ -178,6 +185,8 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
                             x.ID == (int)ArcDPSEnums.TrashID.VoidBrandstalker ||
                             x.ID == (int)ArcDPSEnums.TrashID.VoidColdsteel2 ||
                             x.ID == (int)ArcDPSEnums.TrashID.VoidObliterator2));
+
+                        FixChampionPhase(phase, spearBreakbar);
                         break;
                     case 11:
                         phase.Name = "20% - 0%";
@@ -185,6 +194,38 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
                         phase.AddTarget(tailTarget);
                         break;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Fixes the duration of a spear phase by finding the closest breakbar immunity event and extending the phase's
+        /// time up to that point.
+        /// </summary>
+        ///
+        /// <returns>
+        /// The <c>BreakbarStateEvent</c> that was found or <c>null</c>.
+        /// </returns>
+        private static BreakbarStateEvent FixSpearPhase(ParsedEvtcLog log, AbstractSingleActor mainTarget, PhaseData phase)
+        {
+            BreakbarStateEvent spearBreakbar;
+            spearBreakbar = log.CombatData.GetBreakbarStateEvents(mainTarget.AgentItem).FirstOrDefault(x =>
+                x.Time >= phase.End && x.State == ArcDPSEnums.BreakbarState.Immune);
+            if (spearBreakbar != null)
+            {
+                phase.OverrideEnd(spearBreakbar.Time);
+            }
+
+            return spearBreakbar;
+        }
+
+        /// <summary>
+        /// Fixes the duration of a champion phase so that it doesn't overlap with the extended spear phase.
+        /// </summary>
+        private static void FixChampionPhase(PhaseData phase, BreakbarStateEvent spearBreakbar)
+        {
+            if (spearBreakbar != null)
+            {
+                phase.OverrideStart(spearBreakbar.Time);
             }
         }
 
