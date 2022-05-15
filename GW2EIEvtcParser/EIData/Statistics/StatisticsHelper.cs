@@ -39,6 +39,15 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
+            foreach (Buff dragonsEndContributorBuff in buffs.BuffsByClassification[BuffClassification.DragonsEndContributor])
+            {
+                Buff customDragonsEndContributorBuff = buffs.BuffsByIds[SkillIDs.DragonsEndContributor];
+                if (skillIDs.Contains(dragonsEndContributorBuff.ID) & !_presentSupbuffs.Contains(customDragonsEndContributorBuff)) //if log contains any DEC buff and custom buff has not already been added to buff list, add custom buff
+                {
+                    _presentSupbuffs.Add(customDragonsEndContributorBuff);
+                }
+            }
+
             foreach (Buff supportBuff in buffs.BuffsByClassification[BuffClassification.Support])
             {
                 if (skillIDs.Contains(supportBuff.ID))

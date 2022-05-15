@@ -56,6 +56,34 @@ namespace GW2EIEvtcParser.ParsedData
                 {
                     ElementalistHelper.RemoveDualBuffs(GetBuffData(p.AgentItem), _buffData, skillData);
                 }
+                var dragonsEndContributorIDs = new Dictionary<long, int>()
+                {
+                    {SkillIDs.DragonsEndContributor1, 1},
+                    {SkillIDs.DragonsEndContributor2, 2},
+                    {SkillIDs.DragonsEndContributor3, 3},
+                    {SkillIDs.DragonsEndContributor4, 4},
+                    {SkillIDs.DragonsEndContributor5, 5},
+                    {SkillIDs.DragonsEndContributor6, 6},
+                    {SkillIDs.DragonsEndContributor7, 7},
+                    {SkillIDs.DragonsEndContributor8, 8},
+                    {SkillIDs.DragonsEndContributor9, 9},
+                    {SkillIDs.DragonsEndContributor10, 10},
+                };
+                var dragonsEndContributoBuffEvent = GetBuffData(p.AgentItem).Where(x => dragonsEndContributorIDs.ContainsKey(x.BuffID));
+                foreach (AbstractBuffEvent abe in dragonsEndContributoBuffEvent)
+                {
+                    if (abe is BuffApplyEvent bae)
+                    {
+                        for (int i = 0; i < dragonsEndContributorIDs[bae.BuffID]; i++)
+                        {
+                            toAdd.Add(new BuffApplyEvent(p.AgentItem, p.AgentItem, bae.Time, bae.AppliedDuration, skillData.Get(SkillIDs.DragonsEndContributor), bae.BuffInstance, true));
+                        }
+                    }
+                    else if (abe is BuffRemoveSingleEvent brse)
+                    {
+                        toAdd.Add(new BuffRemoveAllEvent(p.AgentItem, p.AgentItem, brse.Time, brse.RemovedDuration, skillData.Get(SkillIDs.DragonsEndContributor), dragonsEndContributorIDs[brse.BuffID], brse.RemovedDuration));
+                    }
+                }
             }
             toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(this, skillData));
             var buffIDsToSort = new HashSet<long>();

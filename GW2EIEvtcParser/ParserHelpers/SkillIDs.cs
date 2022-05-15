@@ -44,6 +44,7 @@ namespace GW2EIEvtcParser
         public const long Despawn = -23;
         public const long Alive = -24;
         public const long VirtuosoBlades = -25;
+        public const long DragonsEndContributor = -26;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
