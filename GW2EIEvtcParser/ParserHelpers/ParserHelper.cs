@@ -85,7 +85,7 @@ namespace GW2EIEvtcParser
             Item, Gear,
             Necromancer, Reaper, Scourge, Harbinger,
             Elementalist, Tempest, Weaver, Catalyst,
-            Mesmer, Chronomancer, Mirage, Virtuoso, 
+            Mesmer, Chronomancer, Mirage, Virtuoso,
             Warrior, Berserker, Spellbreaker, Bladesworn,
             Revenant, Herald, Renegade, Vindicator,
             Guardian, Dragonhunter, Firebrand, Willbender,
@@ -733,6 +733,7 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TargetID.Ankka:
                     return "https://i.imgur.com/3OQwlpP.png";
                 case ArcDPSEnums.TargetID.MinisterLi:
+                case ArcDPSEnums.TargetID.MinisterLiCM:
                     return "https://i.imgur.com/2nPBLcp.png";
                 case ArcDPSEnums.TargetID.TheDragonVoidJormag:
                     return "https://i.imgur.com/UqHxOqi.png";
@@ -779,7 +780,7 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/MIH8rLB.png";
                 case ArcDPSEnums.TrashID.BlightedEir:
                     return "https://i.imgur.com/aAIFLgG.png";*/
-                    //
+                //
                 case ArcDPSEnums.TrashID.Spirit:
                 case ArcDPSEnums.TrashID.Spirit2:
                 case ArcDPSEnums.TrashID.ChargedSoul:
@@ -1004,14 +1005,19 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.SooWonTail:
                     return "https://i.imgur.com/O8VEP57.png";
                 case ArcDPSEnums.TrashID.TheEnforcer:
+                case ArcDPSEnums.TrashID.TheEnforcerCM:
                     return "https://i.imgur.com/GNQCYda.png";
                 case ArcDPSEnums.TrashID.TheMechRider:
+                case ArcDPSEnums.TrashID.TheMechRiderCM:
                     return "https://i.imgur.com/JSsBc6a.png";
                 case ArcDPSEnums.TrashID.TheMindblade:
+                case ArcDPSEnums.TrashID.TheMindbladeCM:
                     return "https://i.imgur.com/KyMgGQD.png";
                 case ArcDPSEnums.TrashID.TheRitualist:
+                case ArcDPSEnums.TrashID.TheRitualistCM:
                     return "https://i.imgur.com/gG5p3Hz.png";
                 case ArcDPSEnums.TrashID.TheSniper:
+                case ArcDPSEnums.TrashID.TheSniperCM:
                     return "https://i.imgur.com/RWIjUoe.png";
                 case ArcDPSEnums.TrashID.PushableVoidAmalgamate:
                     return "https://i.imgur.com/BuKbosz.png";
@@ -1072,7 +1078,7 @@ namespace GW2EIEvtcParser
                 //
                 case ArcDPSEnums.MinionID.JadeMech:
                     return "https://i.imgur.com/54evTaq.png";
-                    //
+                //
                 case ArcDPSEnums.MinionID.EraBreakrazor:
                     return "https://i.imgur.com/2X3G3Fl.png";
                 case ArcDPSEnums.MinionID.KusDarkrazor:
@@ -1357,31 +1363,6 @@ namespace GW2EIEvtcParser
             }
             return false;
         }
-                
-    }
 
-    public static class Colors 
-    {
-        public const string Red = "rgb(255,0,0)";
-        public const string DarkRed = "rgb(128,0,0)";
-        public const string Orange = "rgb(255,100,0)";
-        public const string LightOrange = "rgb(255,160,0)";
-        public const string Yellow = "rgb(255,220,0)";
-        public const string Brown = "rgb(120,100,0)";
-        public const string Green = "rgb(0,255,0)";
-        public const string DarkGreen = "rgb(0,128,0)";
-        public const string Teal = "rgb(0,255,255)";
-        public const string DarkTeal = "rgb(0,160,150)";
-        public const string LightBlue = "rgb(0,140,255)"; 
-        public const string Purple = "rgb(150,0,255)";
-        public const string DarkPurple = "rgb(50,0,150)";
-        public const string LightPurple = "rgb(200, 140, 255)";
-        public const string Pink = "rgb(255,0,150)";
-        public const string Magenta = "rgb(255,0,255)";
-        public const string Blue = "rgb(0,0,255)";
-        public const string White = "rgb(255,255,255)";
-        public const string Grey = "rgb(60,60,60)";
-        public const string Black = "rgb(0,0,0)";
-        public const string LightRed = "rgb(255,128,128)";
     }
 }
