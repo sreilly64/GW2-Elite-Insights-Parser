@@ -144,6 +144,10 @@ namespace GW2EIEvtcParser
             Extension = 40,
             APIDelayed = 41,
             InstanceStart = 42,
+            TickRate = 43,
+            Last90BeforeDown = 44,
+            Effect = 45,
+            EffectIDToGUID = 46,
             Unknown
         };
 
