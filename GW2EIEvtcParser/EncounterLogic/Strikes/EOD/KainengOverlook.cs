@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new HitOnPlayerMechanic(new long[] { EnforcerRushingJustice, EnforcerRushingJusticeCM }, "Rushing Justice", new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", 150),
                 new HitOnPlayerMechanic(BoomingCommandOverlap, "Booming Command", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.O", "Red circle overlap", "Red Circle", 150),
                 new PlayerBuffApplyMechanic(FixatedKainengOverlook, "Fixated (Mindblade)", new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Fixated.M", "Fixated by The Mindblade", "Fixated Mindblade", 150, (evt, log) => evt.CreditedBy.ID == (int)ArcDPSEnums.TrashID.TheMindblade || evt.CreditedBy.ID == (int)ArcDPSEnums.TrashID.TheMindbladeCM),
-                new PlayerBuffApplyMechanic(FixatedKainengOverlook, "Fixated (Enforcer)", new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Fixated.E", "Fixated by The Enforcer", "Fixated Enforcer", 150, (evt, log) => evt.CreditedBy.ID == (int)ArcDPSEnums.TrashID.TheEnforcer || evt.CreditedBy.ID == (int)ArcDPSEnums.TrashID.TheEnforcerCM),
+                new PlayerBuffApplyMechanic(FixatedKainengOverlook, "Fixated (Enforcer)", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Fixated.E", "Fixated by The Enforcer", "Fixated Enforcer", 150, (evt, log) => evt.CreditedBy.ID == (int)ArcDPSEnums.TrashID.TheEnforcer || evt.CreditedBy.ID == (int)ArcDPSEnums.TrashID.TheEnforcerCM),
                 new EnemyBuffApplyMechanic(LethalInspiration, "Lethal Inspiration", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkGreen), "Pwrd.Up1", "Powered Up (Split 1)", "Powered Up 1", 150),
                 new HitOnPlayerMechanic(new long[]{StormOfSwords1, StormOfSwords2, StormOfSwords3 }, "Storm of Swords", new MechanicPlotlySetting(Symbols.Circle, Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
                 new HitOnPlayerMechanic(JadeBusterCannon, "Jade Buster Cannon", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Orange), "Laser.H", "Hit by Big Laser", "Laser Hit", 150),
@@ -38,9 +38,9 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/4QeDiit.png",
-                            (942, 835),
-                            (-23828, -16565, -20362,-13482)/*,
+            return new CombatReplayMap("https://i.imgur.com/53ECM20.png",
+                            (1803, 1918),
+                            (-24798, -18014, -18164,-10932)/*,
                             (-15360, -36864, 15360, 39936),
                             (3456, 11012, 4736, 14212)*/);
         }

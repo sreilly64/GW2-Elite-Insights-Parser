@@ -200,6 +200,20 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.StateChange.BuffInitial:
                     buffEvents.Add(new BuffApplyEvent(stateChangeEvent, agentData, skillData));
                     break;
+                case ArcDPSEnums.StateChange.Effect:
+                    var effectEvt = new EffectEvent(stateChangeEvent, agentData);
+                    Add(statusEvents.EffectEventssByID, effectEvt.EffectID, effectEvt);
+                    Add(statusEvents.EffectsEventsBySrc, effectEvt.Src, effectEvt);
+                    if (effectEvt.IsAroundDst)
+                    {
+                        Add(statusEvents.EffectsEventsByDst, effectEvt.Dst, effectEvt);
+                    }
+                    break;
+                case ArcDPSEnums.StateChange.EffectIDToGUID:
+                    var idToGUIDEvt = new EffectIDToGUIDEvent(stateChangeEvent);
+                    Add(metaDataEvents.EffectIDToGUIDEvents, idToGUIDEvt.EffectID, idToGUIDEvt);
+                    Add(metaDataEvents.GUIDToEffectIDEvents, idToGUIDEvt.GuidKey, idToGUIDEvt);
+                    break;
                 default:
                     break;
             }
@@ -279,7 +293,7 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         resBySrcAgentBySkillID.Add(new AnimatedCastEvent(startItem, agentData, skillData, fightData.LogEnd));
                     }
-                    resBySrcAgentBySkillID.RemoveAll(x => x.ActualDuration <= 1);
+                    resBySrcAgentBySkillID.RemoveAll(x => x.Caster.IsPlayer && x.ActualDuration <= 1);
                     resBySrcAgent.AddRange(resBySrcAgentBySkillID);
                 }
                 resBySrcAgent = resBySrcAgent.OrderBy(x => x.Time).ToList();
