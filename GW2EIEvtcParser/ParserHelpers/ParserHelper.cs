@@ -49,6 +49,9 @@ namespace GW2EIEvtcParser
             internal const ulong EODBeta4 = 122479;
             internal const ulong March2022Balance = 126520;
             internal const ulong March2022Balance2 = 127285;
+            internal const ulong June2022Balance = 130910;
+            internal const ulong June2022BalanceHotFix = 131084;
+            internal const ulong August2022BalanceHotFix = 132359;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
@@ -62,6 +65,7 @@ namespace GW2EIEvtcParser
             internal const int DirectX11Update = 20210923;
             internal const int InternalSkillIDsChange = 20220304;
             internal const int BuffAttrFlatIncRemoved = 20220308;
+            internal const int FunctionalIDToGUIDEvents = 20220709;
             //
             internal const int EndOfLife = int.MaxValue;
         }
@@ -136,6 +140,26 @@ namespace GW2EIEvtcParser
             return groupByTime;
         }
 
+        internal static double RadianToDegree(double radian)
+        {
+            return radian * 180.0 / Math.PI;
+        }
+
+        internal static float RadianToDegreeF(double radian)
+        {
+            return (float)RadianToDegree(radian);
+        }
+
+        internal static double DegreeToRadian(double degree)
+        {
+            return degree * Math.PI / 180.0;
+        }
+
+        internal static float DegreeToRadians(double degree)
+        {
+            return (float)DegreeToRadian(degree);
+        }
+
         internal static T MaxBy<T, TComparable>(this IEnumerable<T> en, Func<T, TComparable> evaluate) where TComparable : IComparable<TComparable>
         {
             return en.Select(t => (value: t, eval: evaluate(t)))
@@ -146,6 +170,16 @@ namespace GW2EIEvtcParser
         {
             return en.Select(t => (value: t, eval: evaluate(t)))
                 .Aggregate((max, next) => next.eval.CompareTo(max.eval) < 0 ? next : max).value;
+        }
+
+        internal static string ToHexString(byte[] bytes, int start, int end)
+        {
+            string res = "";
+            for (int i = start; i < end; i++)
+            {
+                res += bytes[i].ToString("X2");
+            }
+            return res;
         }
 
         /*
@@ -917,9 +951,8 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.SorrowDemon3:
                 case ArcDPSEnums.TrashID.SorrowDemon4:
                 case ArcDPSEnums.TrashID.SorrowDemon5:
-                case ArcDPSEnums.TrashID.ScarletPhantom2:
-                case ArcDPSEnums.TrashID.ScarletPhantom1:
                 case ArcDPSEnums.TrashID.ScarletPhantomHP:
+                case ArcDPSEnums.TrashID.ScarletPhantomHP2:
                 case ArcDPSEnums.TrashID.ScarletPhantomBreakbar:
                 case ArcDPSEnums.TrashID.AnkkaHallucination1:
                 case ArcDPSEnums.TrashID.AnkkaHallucination2:
@@ -927,6 +960,7 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.VoidSaltsprayDragon:
                 case ArcDPSEnums.TrashID.VoidGiant:
                 case ArcDPSEnums.TrashID.VoidObliterator:
+                case ArcDPSEnums.TrashID.VoidGoliath:
                 case ArcDPSEnums.TrashID.VoidTimeCaster:
                 case ArcDPSEnums.TrashID.VoidGiant2:
                 case ArcDPSEnums.TrashID.VoidTimeCaster2:
@@ -1020,6 +1054,7 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.TheSniperCM:
                     return "https://i.imgur.com/RWIjUoe.png";
                 case ArcDPSEnums.TrashID.PushableVoidAmalgamate:
+                case ArcDPSEnums.TrashID.KillableVoidAmalgamate:
                     return "https://i.imgur.com/BuKbosz.png";
             }
             //
@@ -1027,6 +1062,8 @@ namespace GW2EIEvtcParser
             {
                 case ArcDPSEnums.MinionID.RuneJaggedHorror:
                     return "https://i.imgur.com/opMTn10.png";
+                case ArcDPSEnums.MinionID.RuneMarkIGolem:
+                    return "https://i.imgur.com/0ePg7eN.png";
                 //
                 case ArcDPSEnums.MinionID.Clone1:
                 case ArcDPSEnums.MinionID.Clone2:

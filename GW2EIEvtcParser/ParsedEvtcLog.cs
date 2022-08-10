@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser
                     PlayerList[i].Anonymize(i + 1);
                 }
                 IReadOnlyList<AgentItem> allPlayerAgents = agentData.GetAgentByType(AgentItem.AgentType.Player);
-                var playerOffset = PlayerList.Count;
+                int playerOffset = PlayerList.Count;
                 foreach (AgentItem playerAgent in allPlayerAgents)
                 {
                     if (!PlayerAgents.Contains(playerAgent))
@@ -79,7 +79,7 @@ namespace GW2EIEvtcParser
             }
             //
             operation.UpdateProgressWithCancellationCheck("Checking CM");
-            FightData.SetCM(CombatData, AgentData);
+            FightData.SetEncounterMode(CombatData, AgentData);
             operation.UpdateProgressWithCancellationCheck("Setting Fight Name");
             FightData.SetFightName(CombatData, AgentData);
             //

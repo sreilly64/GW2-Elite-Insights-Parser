@@ -15,41 +15,41 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(PrimordialStanceSkill, PrimordialStanceEffect, EIData.InstantCastFinder.DefaultICD), // Primordial Stance
-            new BuffGainCastFinder(StoneResonanceSkill, StoneResonanceEffect, 500), // Stone Resonance
-            new BuffGainCastFinder(UnravelSkill, UnravelEffect, EIData.InstantCastFinder.DefaultICD), // Unravel
+            new BuffGainCastFinder(PrimordialStanceSkill, PrimordialStanceEffect), // Primordial Stance
+            new BuffGainCastFinder(StoneResonanceSkill, StoneResonanceEffect).UsingICD(500), // Stone Resonance
+            new BuffGainCastFinder(UnravelSkill, UnravelEffect), // Unravel
             // Fire       
-            new BuffGainCastFinder(DualFireAttunement, DualFireAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(FireWaterAttunement, FireWaterAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(FireAirAttunement, FireAirAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(FireEarthAttunement, FireEarthAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(DualFireAttunement, DualFireAttunement),
+            new BuffGainCastFinder(FireWaterAttunement, FireWaterAttunement),
+            new BuffGainCastFinder(FireAirAttunement, FireAirAttunement),
+            new BuffGainCastFinder(FireEarthAttunement, FireEarthAttunement),
             // Water
-            new BuffGainCastFinder(WaterFireAttunement, WaterFireAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(DualWaterAttunement, DualWaterAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(WaterAirAttunement, WaterAirAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(WaterEarthAttunement, WaterEarthAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(WaterFireAttunement, WaterFireAttunement),
+            new BuffGainCastFinder(DualWaterAttunement, DualWaterAttunement),
+            new BuffGainCastFinder(WaterAirAttunement, WaterAirAttunement),
+            new BuffGainCastFinder(WaterEarthAttunement, WaterEarthAttunement),
             // Air
-            new BuffGainCastFinder(AirFireAttunement, AirFireAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(AirWaterAttunement, AirWaterAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(DualAirAttunement, DualAirAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(AirEarthAttunement, AirEarthAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(AirFireAttunement, AirFireAttunement),
+            new BuffGainCastFinder(AirWaterAttunement, AirWaterAttunement),
+            new BuffGainCastFinder(DualAirAttunement, DualAirAttunement),
+            new BuffGainCastFinder(AirEarthAttunement, AirEarthAttunement),
             // Earth
-            new BuffGainCastFinder(EarthFireAttunement, EarthFireAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(EarthWaterAttunement, EarthWaterAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(EarthAirAttunement, EarthAirAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(DualEarthAttunement, DualEarthAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(EarthFireAttunement, EarthFireAttunement),
+            new BuffGainCastFinder(EarthWaterAttunement, EarthWaterAttunement),
+            new BuffGainCastFinder(EarthAirAttunement, EarthAirAttunement),
+            new BuffGainCastFinder(DualEarthAttunement, DualEarthAttunement),
         };
 
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             new BuffDamageModifier(WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, "https://wiki.guildwars2.com/images/7/75/Weaver%27s_Prowess.png", DamageModifierMode.All),
-            new BuffDamageModifier(ElementsOfRage, "Elements of Rage", "10% (8s) after double attuning", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, "https://wiki.guildwars2.com/images/a/a2/Elements_of_Rage.png", 0, GW2Builds.May2021Balance, DamageModifierMode.All),
-            new BuffDamageModifier(ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, "https://wiki.guildwars2.com/images/a/a2/Elements_of_Rage.png", GW2Builds.May2021Balance, GW2Builds.EndOfLife, DamageModifierMode.All),
+            new BuffDamageModifier(ElementsOfRage, "Elements of Rage", "10% (8s) after double attuning", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, "https://wiki.guildwars2.com/images/a/a2/Elements_of_Rage.png", DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+            new BuffDamageModifier(ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, "https://wiki.guildwars2.com/images/a/a2/Elements_of_Rage.png", DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance),
             new BuffDamageModifier(WovenFire, "Woven Fire", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, "https://wiki.guildwars2.com/images/b/b1/Woven_Fire.png", DamageModifierMode.All),
             new BuffDamageModifier(PerfectWeave, "Perfect Weave", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, "https://wiki.guildwars2.com/images/2/2a/Weave_Self.png", DamageModifierMode.All),
-            new BuffDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "7% under swiftness/superspeed", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, "https://wiki.guildwars2.com/images/9/94/Swift_Revenge.png", 0, GW2Builds.July2019Balance, DamageModifierMode.PvE),
-            new BuffDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, "https://wiki.guildwars2.com/images/9/94/Swift_Revenge.png", GW2Builds.July2019Balance, GW2Builds.EndOfLife, DamageModifierMode.All)
+            new BuffDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "7% under swiftness/superspeed", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, "https://wiki.guildwars2.com/images/9/94/Swift_Revenge.png", DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
+            new BuffDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, "https://wiki.guildwars2.com/images/9/94/Swift_Revenge.png", DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance)
         };
 
 

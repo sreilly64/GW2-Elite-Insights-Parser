@@ -27,6 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "gors";
             Icon = "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
             EncounterCategoryInformation.InSubCategoryOrder = 1;
+            EncounterID |= 0x000002;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -41,7 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(HauntingAura, HauntingAura, InstantCastFinder.DefaultICD), // Haunting Aura
+                new DamageCastFinder(HauntingAura, HauntingAura), // Haunting Aura
             };
         }
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

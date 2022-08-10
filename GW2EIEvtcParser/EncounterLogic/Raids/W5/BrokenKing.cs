@@ -21,6 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "brokenking";
             Icon = "https://wiki.guildwars2.com/images/3/37/Mini_Broken_King.png";
             EncounterCategoryInformation.InSubCategoryOrder = 2;
+            EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -81,7 +82,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(48218, 48218, InstantCastFinder.DefaultICD), // Biting Aura
+                new DamageCastFinder(48218, 48218), // Biting Aura
             };
         }
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

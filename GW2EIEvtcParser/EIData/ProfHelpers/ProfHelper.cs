@@ -13,10 +13,10 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly List<InstantCastFinder> _genericInstantCastFinders = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(SigilOfEarth, SigilOfEarth, 500), // Earth Sigil
-            new DamageCastFinder(SigilOfAir, SigilOfAir, 500), // Air Sigil
-            new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy, 500), // Hydro Sigil
-            new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1, EIData.InstantCastFinder.DefaultICD), // Water Blast Combo
+            new DamageCastFinder(SigilOfEarth, SigilOfEarth).UsingICD(500), // Earth Sigil
+            new DamageCastFinder(SigilOfAir, SigilOfAir).UsingICD(500), // Air Sigil
+            new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy).UsingICD(500), // Hydro Sigil
+            new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1), // Water Blast Combo
         };
 
         internal static void AttachMasterToGadgetByCastData(CombatData combatData, IReadOnlyCollection<AgentItem> gadgets, IReadOnlyList<long> castIDS, long castEndThreshold)
@@ -271,6 +271,17 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            return;
+        }
+
+        internal static void DEBUG_ComputeProfessionCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            var knownEffects = new HashSet<long>();
+            CombatReplay.DebugEffects(p, log, replay, knownEffects);
+        }
+
 
         private static readonly HashSet<Spec> _canSummonClones = new HashSet<Spec>()
         {
@@ -287,6 +298,7 @@ namespace GW2EIEvtcParser.EIData
         private static HashSet<long> CommonMinions = new HashSet<long>()
         {
             (int)ArcDPSEnums.MinionID.RuneJaggedHorror,
+            (int)ArcDPSEnums.MinionID.RuneMarkIGolem,
         };
 
         internal static bool IsKnownMinionID(AgentItem minion, Spec spec)

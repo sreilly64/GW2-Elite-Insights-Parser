@@ -22,6 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "boneskin";
             Icon = "https://i.imgur.com/meYwQmA.png";
             EncounterCategoryInformation.InSubCategoryOrder = 2;
+            EncounterID |= 0x000004;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -37,7 +38,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(58736, 58736, InstantCastFinder.DefaultICD), // Unnatural Aura
+                new DamageCastFinder(58736, 58736), // Unnatural Aura
             };
         }
 

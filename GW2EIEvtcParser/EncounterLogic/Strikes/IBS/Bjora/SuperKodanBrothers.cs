@@ -22,6 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "supkodbros";
             Icon = "https://i.imgur.com/lNXXbnC.png";
             EncounterCategoryInformation.InSubCategoryOrder = 1;
+            EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -36,7 +37,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(58174, 58174, InstantCastFinder.DefaultICD), // Vengeful Aura Claw
+                new DamageCastFinder(58174, 58174), // Vengeful Aura Claw
             };
         }
         protected override void SetSuccessByDeath(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all)

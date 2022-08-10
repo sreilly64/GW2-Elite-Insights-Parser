@@ -23,6 +23,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Icon = "https://wiki.guildwars2.com/images/thumb/0/07/Icebrood_Construct_%28partially_buried%29.jpg/320px-Icebrood_Construct_%28partially_buried%29.jpg";
             EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.Grothmar;
             EncounterCategoryInformation.InSubCategoryOrder = 0;
+            EncounterID |= 0x000001;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -37,7 +38,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(57593, 57593, InstantCastFinder.DefaultICD), // Frostbite Aura
+                new DamageCastFinder(57593, 57593), // Frostbite Aura
             };
         }
 

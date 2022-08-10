@@ -34,6 +34,9 @@ class MechanicDrawable {
                 let masterId = this.connectedTo;
                 this.master = animator.getActorData(masterId);
             }
+            if (!this.master) {
+                return null;
+            }
             return this.master.getPosition();
         }
     }
@@ -90,7 +93,7 @@ class FacingMechanicDrawable extends MechanicDrawable {
         ctx.save();
         ctx.translate(pos.x, pos.y);
         ctx.rotate(angle);
-        const facingFullSize = 5 * this.master.pixelSize / (3 * animator.scale);
+        const facingFullSize = 5 * this.master.getSize() / 3;
         const facingHalfSize = facingFullSize / 2;
         if (this.master !== null && animator.coneControl.enabled && this.master.isSelected()) {           
             ctx.save(); 
@@ -340,6 +343,9 @@ class LineMechanicDrawable extends FormMechanicDrawable {
             if (this.endmaster === null) {
                 let masterId = this.connectedFrom;
                 this.endmaster = animator.getActorData(masterId);
+            }       
+            if (!this.endmaster) {
+                return null;
             }
             return this.endmaster.getPosition();
         }

@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EncounterLogic
     public abstract class FightLogic
     {
 
-        public enum ParseMode { FullInstance, Instanced10, Instanced5, Benchmark, WvW, sPvP, Unknown };
+        public enum ParseMode { FullInstance, Instanced10, Instanced5, Benchmark, WvW, sPvP, OpenWorld, Unknown };
 
         private CombatReplayMap _map;
         protected List<Mechanic> MechanicList { get; }//Resurrects (start), Resurrect
@@ -26,12 +26,16 @@ namespace GW2EIEvtcParser.EncounterLogic
         public IReadOnlyList<NPC> TrashMobs => _trashMobs;
         public IReadOnlyList<AbstractSingleActor> NonPlayerFriendlies => _nonPlayerFriendlies;
         public IReadOnlyList<AbstractSingleActor> Targets => _targets;
-        protected readonly List<NPC> _trashMobs = new List<NPC>();
-        protected readonly List<AbstractSingleActor> _nonPlayerFriendlies = new List<AbstractSingleActor>();
-        protected readonly List<AbstractSingleActor> _targets = new List<AbstractSingleActor>();
+        protected List<NPC> _trashMobs { get; } = new List<NPC>();
+        protected List<AbstractSingleActor> _nonPlayerFriendlies { get; } = new List<AbstractSingleActor>();
+        protected List<AbstractSingleActor> _targets { get; } = new List<AbstractSingleActor>();
+
+        protected List<(Buff buff, int stack)> InstanceBuffs { get; private set; } = null;
 
         public bool Targetless { get; protected set; } = false;
         protected int GenericTriggerID { get; }
+
+        public long EncounterID { get; protected set; } = EncounterIDs.Unknown;
 
         public EncounterCategory EncounterCategoryInformation { get; protected set; }
 
@@ -81,6 +85,41 @@ namespace GW2EIEvtcParser.EncounterLogic
                 _map.ComputeBoundingBox(log);
             }
             return _map;
+        }
+
+        protected virtual void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            InstanceBuffs = new List<(Buff buff, int stack)>();
+            foreach (Buff fractalInstability in log.Buffs.BuffsBySource[ParserHelper.Source.FractalInstability])
+            {
+                if (log.CombatData.GetBuffData(fractalInstability.ID).Any(x => x.To.IsPlayer))
+                {
+                    InstanceBuffs.Add((fractalInstability, 1));
+                }
+            }
+            int emboldenedStacks = (int)log.PlayerList.Select(x => {
+                if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out BuffsGraphModel graph))
+                {
+                    return graph.BuffChart.Max(y => y.Value);
+                }
+                else
+                {
+                    return 0;
+                }
+            }).Max();
+            if (emboldenedStacks > 0)
+            {
+                InstanceBuffs.Add((log.Buffs.BuffsByIds[SkillIDs.Emboldened], emboldenedStacks));
+            }
+        }
+
+        public virtual IReadOnlyList<(Buff buff, int stack)> GetInstanceBuffs(ParsedEvtcLog log)
+        {
+            if (InstanceBuffs == null)
+            {
+                SetInstanceBuffs(log);
+            }
+            return InstanceBuffs;
         }
 
         protected virtual List<int> GetTargetsIDs()
@@ -270,6 +309,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             return phases;
         }
+        
+        internal void InvalidateEncounterID()
+        {
+            EncounterID = EncounterIDs.EncounterMasks.Unsupported;
+        }
 
         internal List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
         {
@@ -430,9 +474,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
         }
 
-        internal virtual FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal virtual FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return FightData.CMStatus.NoCM;
+            return FightData.EncounterMode.Normal;
         }
 
         protected void SetSuccessByDeath(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all, int idFirst, params int[] ids)

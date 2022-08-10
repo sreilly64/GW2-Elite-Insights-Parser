@@ -22,6 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "fraenir";
             Icon = "https://wiki.guildwars2.com/images/thumb/6/67/Fraenir_of_Jormag.jpg/208px-Fraenir_of_Jormag.jpg";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
+            EncounterID |= 0x000002;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -37,7 +38,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(58219, 58219, InstantCastFinder.DefaultICD), // Frostbite Aura
+                new DamageCastFinder(58219, 58219), // Frostbite Aura
             };
         }
 

@@ -16,10 +16,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(PowerSpike, PowerSpike, EIData.InstantCastFinder.DefaultICD, 0, GW2Builds.May2021Balance), // Power spike
-            new DamageCastFinder(MantraOfPain, MantraOfPain, EIData.InstantCastFinder.DefaultICD, GW2Builds.May2021Balance, GW2Builds.EndOfLife), // Mantra of Pain
-            new EXTHealingCastFinder(MantraOfRecovery, MantraOfRecovery, EIData.InstantCastFinder.DefaultICD, GW2Builds.May2021Balance, GW2Builds.EndOfLife), // Mantra of Recovery
-            new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightEffect, EIData.InstantCastFinder.DefaultICD, (brae, combatData) => {
+            new DamageCastFinder(PowerSpike, PowerSpike).WithBuilds(GW2Builds.StartOfLife ,GW2Builds.May2021Balance), // Power spike
+            new DamageCastFinder(MantraOfPain, MantraOfPain).WithBuilds(GW2Builds.May2021Balance), // Mantra of Pain
+            new EXTHealingCastFinder(MantraOfRecovery, MantraOfRecovery).WithBuilds(GW2Builds.May2021Balance), // Mantra of Recovery
+            new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightEffect).UsingChecker((brae, combatData) => {
                 return combatData.GetBuffData(brae.To).Any(x =>
                                     x is BuffApplyEvent bae &&
                                     bae.BuffID == SkillIDs.HideInShadows &&
@@ -27,11 +27,10 @@ namespace GW2EIEvtcParser.EIData
                                     bae.CreditedBy == brae.To &&
                                     Math.Abs(brae.Time - bae.Time) <= ServerDelayConstant
                                  );
-                }
-            ), // Signet of Midnight
-            new BuffGainCastFinder(PortalEntre, PortalWeaving, EIData.InstantCastFinder.DefaultICD), // Portal Entre
-            new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender, EIData.InstantCastFinder.DefaultICD), // Lesser Phantasmal Defender
-            /*new BuffGainCastFinder(10192, 10243, EIData.InstantCastFinder.DefaultICD, GW2Builds.October2018Balance, GW2Builds.July2019Balance, (evt, combatData) => {
+                }), // Signet of Midnight
+            new BuffGainCastFinder(PortalEntre, PortalWeaving), // Portal Entre
+            new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender), // Lesser Phantasmal Defender
+            /*new BuffGainCastFinder(10192, 10243, GW2Builds.October2018Balance, GW2Builds.July2019Balance, (evt, combatData) => {
                 var buffsLossToCheck = new List<long>
                 {
                     10235, 30739, 21751, 10231, 10246, 10233
@@ -46,7 +45,7 @@ namespace GW2EIEvtcParser.EIData
                 return true;
 
             }), // Distortion
-            new BuffGainCastFinder(10192, 10243, EIData.InstantCastFinder.DefaultICD, GW2Builds.July2019Balance, 104844, (evt, combatData) => {
+            new BuffGainCastFinder(10192, 10243, GW2Builds.July2019Balance, 104844, (evt, combatData) => {
                 if (evt.To.Prof == "Chronomancer")
                 {
                     return false;
@@ -65,7 +64,7 @@ namespace GW2EIEvtcParser.EIData
                 return true;
 
             }), // Distortion
-            new BuffGainCastFinder(10192, 10243, EIData.InstantCastFinder.DefaultICD, 104844, GW2Builds.EndOfLife, (evt, combatData) => {
+            new BuffGainCastFinder(10192, 10243, 104844, GW2Builds.EndOfLife, (evt, combatData) => {
                 var buffsLossToCheck = new List<long>
                 {
                     10235, 30739, 21751, 10231, 10246, 10233
@@ -80,6 +79,14 @@ namespace GW2EIEvtcParser.EIData
                 return true;
                 
             }), // Distortion*/
+            new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback).UsingChecker((evt, log) => evt.Src.BaseSpec == Spec.Mesmer),
+            new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink).UsingChecker((evt, log) => evt.Dst.BaseSpec == Spec.Mesmer),
+            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerMindWrack).UsingChecker((evt, log) => !log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
+            new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration).UsingChecker((evt, log) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
+            new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion).UsingChecker((evt, log) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
+            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion).UsingChecker((evt, log) => log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
+            new EffectCastFinder(MantraOfResolve, EffectGUIDs.MesmerMantraOfResolve).UsingChecker((evt, log) => evt.Src.BaseSpec == Spec.Mesmer),
+            new EffectCastFinderByDst(MantraOfConcentration, EffectGUIDs.MesmerMantraOfConcentration).UsingChecker((evt, log) => evt.Dst.BaseSpec == Spec.Mesmer),
         };
 
 
@@ -88,8 +95,8 @@ namespace GW2EIEvtcParser.EIData
             // Domination
             // Empowered illusions require knowing all illusion species ID
             // We need illusion species ID to enable Vicious Expression on All
-            new BuffDamageModifierTarget(NumberOfBoons, "Vicious Expression", "25% on boonless target",  DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png", GW2Builds.February2020Balance, 102389, DamageModifierMode.PvE),
-            new BuffDamageModifierTarget(NumberOfBoons, "Vicious Expression", "15% on boonless target",  DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png", 102389, GW2Builds.EndOfLife, DamageModifierMode.All),
+            new BuffDamageModifierTarget(NumberOfBoons, "Vicious Expression", "25% on boonless target",  DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png", DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, 102389),
+            new BuffDamageModifierTarget(NumberOfBoons, "Vicious Expression", "15% on boonless target",  DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png", DamageModifierMode.All).WithBuilds(102389),
             new DamageLogDamageModifier("Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, "https://wiki.guildwars2.com/images/7/78/Temporal_Enchanter.png", (x,log) =>
             {
                 double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
@@ -99,7 +106,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return selfHP > dstHP;
-            }, ByPresence, GW2Builds.October2018Balance, GW2Builds.EndOfLife, DamageModifierMode.PvE).UsingApproximate(true),
+            }, ByPresence, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance).UsingApproximate(true),
             new DamageLogDamageModifier("Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, "https://wiki.guildwars2.com/images/7/78/Temporal_Enchanter.png", (x,log) =>
             {
                 double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
@@ -109,7 +116,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return selfHP > dstHP;
-            }, ByPresence, GW2Builds.October2018Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW).UsingApproximate(true),
+            }, ByPresence, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.October2018Balance).UsingApproximate(true),
             new BuffDamageModifierTarget(Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, "https://wiki.guildwars2.com/images/3/33/Fragility.png", DamageModifierMode.All),
             // Dueling
             // Superiority Complex can all the conditions be tracked?
@@ -130,7 +137,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Signet of Midnight",SignetOfMidnightEffect, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/24/Signet_of_Midnight.png"),
                 new Buff("Signet of Humility",SignetOfHumility, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b5/Signet_of_Humility.png"),
                 //skills
-                new Buff("Distortion",Distortion, Source.Mesmer, BuffStackType.Queue, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/22/Distortion.png"),
+                new Buff("Distortion",DistortionEffect, Source.Mesmer, BuffStackType.Queue, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/22/Distortion.png"),
                 new Buff("Blur", Blur , Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/22/Distortion.png"),
                 new Buff("Mirror",Mirror, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b8/Mirror.png"),
                 new Buff("Echo",Echo, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/ce/Echo.png"),

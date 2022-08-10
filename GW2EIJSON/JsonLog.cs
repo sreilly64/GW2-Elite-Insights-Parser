@@ -189,7 +189,12 @@ namespace GW2EIJSON
         /// The id with which the log has been triggered
         /// </summary>
         public int TriggerID { get; set; }
-        
+        /// <summary>
+        /// The elite insight id of the log, indicates which encounter the log corresponds to. \n
+        /// see https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/EncounterIDs.md/
+        /// </summary>
+        public long EIEncounterID { get; set; }
+
         /// <summary>
         /// The name of the fight
         /// </summary>
@@ -319,13 +324,18 @@ namespace GW2EIJSON
         /// </summary>
         /// <seealso cref="BuffMap"/>
         public IReadOnlyDictionary<string, IReadOnlyCollection<long>> PersonalBuffs { get; set; }
-        
+
         /// <summary>
-        /// List of present fractal instabilities, the values are buff ids
+        /// List of present fractal instabilities, the values are buff ids. DEPRECATED: use PresentInstanceBuffs instead
         /// </summary>
         /// <seealso cref="BuffMap"/>
         public IReadOnlyList<long> PresentFractalInstabilities { get; set; }
-        
+        /// <summary>
+        /// List of present instance buffs, values are arrays of 2 elements, value[0] is buff id, value[1] is number of stacks.
+        /// </summary>
+        /// <seealso cref="BuffMap"/>
+        public IReadOnlyList<long[]> PresentInstanceBuffs { get; set; }
+
         /// <summary>
         /// List of error messages given by ArcDPS
         /// </summary>

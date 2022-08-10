@@ -11,22 +11,22 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(Shadowstep,Infiltration,EIData.InstantCastFinder.DefaultICD), // Shadowstep
-            new BuffLossCastFinder(ShadowReturn,Infiltration,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => evt.RemovedDuration > ServerDelayConstant), // Shadow Return
-            new DamageCastFinder(Mug, Mug, EIData.InstantCastFinder.DefaultICD), // Mug
-            new BuffGainCastFinder(AssassinsSignet,AssassinsSignetActive,EIData.InstantCastFinder.DefaultICD), // Assassin's Signet
-            new BuffGiveCastFinder(DevourerVenomSkill,DevourerVenomEffect,EIData.InstantCastFinder.DefaultICD), // Devourer Venom
-            new BuffGiveCastFinder(IceDrakeVenomSkill,IceDrakeVenomEffect,EIData.InstantCastFinder.DefaultICD), // Ice Drake Venom
-            new BuffGiveCastFinder(SkaleVenomSkill,SkaleVenomEffect,EIData.InstantCastFinder.DefaultICD), // Skale Venom
-            new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomEffect,EIData.InstantCastFinder.DefaultICD), // Soul Stone Venom
+            new BuffGainCastFinder(Shadowstep,Infiltration), // Shadowstep
+            new BuffLossCastFinder(ShadowReturn,Infiltration).UsingChecker((evt, combatData) => evt.RemovedDuration > ServerDelayConstant), // Shadow Return
+            new DamageCastFinder(Mug, Mug), // Mug
+            new BuffGainCastFinder(AssassinsSignet,AssassinsSignetActive), // Assassin's Signet
+            new BuffGiveCastFinder(DevourerVenomSkill,DevourerVenomEffect), // Devourer Venom
+            new BuffGiveCastFinder(IceDrakeVenomSkill,IceDrakeVenomEffect), // Ice Drake Venom
+            new BuffGiveCastFinder(SkaleVenomSkill,SkaleVenomEffect), // Skale Venom
+            new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomEffect), // Soul Stone Venom
             //new BuffGiveCastFinder(13037,13036,InstantCastFinder.DefaultICD), // Spider Venom - same id as leeching venom trait?
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             // Deadly arts
-            new BuffDamageModifierTarget(NumberOfConditions, "Exposed Weakness", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Thief, ByStack, "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png", GW2Builds.July2018Balance, GW2Builds.EndOfLife, DamageModifierMode.All),
-            new BuffDamageModifierTarget(NumberOfConditions, "Exposed Weakness", "10% if condition on target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png", 0, GW2Builds.July2018Balance, DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(NumberOfConditions, "Exposed Weakness", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Thief, ByStack, "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png", DamageModifierMode.All).WithBuilds(GW2Builds.July2018Balance),
+            new BuffDamageModifierTarget(NumberOfConditions, "Exposed Weakness", "10% if condition on target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png", DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2018Balance),
             new DamageLogDamageModifier("Executioner", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Thief,"https://wiki.guildwars2.com/images/9/93/Executioner.png", (x, log) => x.AgainstUnderFifty, ByPresence, DamageModifierMode.All),
             // Critical Strikes
             new DamageLogDamageModifier("Twin Fangs","7% over 90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Thief,"https://wiki.guildwars2.com/images/d/d1/Ferocious_Strikes.png", (x, log) => x.IsOverNinety && x.HasCrit, ByPresence, DamageModifierMode.All),

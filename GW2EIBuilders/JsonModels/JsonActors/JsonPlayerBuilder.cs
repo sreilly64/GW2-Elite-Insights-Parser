@@ -39,7 +39,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 jsonPlayer.GuildID = guildEvent.APIString;
             }
             jsonPlayer.ActiveTimes = phases.Select(x => player.GetActiveDuration(log, x.Start, x.End)).ToList();
-            jsonPlayer.HasCommanderTag = player.HasCommanderTag;
+            jsonPlayer.HasCommanderTag = player is Player p && p.IsCommander(log);
             //
             jsonPlayer.Support = phases.Select(phase => JsonStatisticsBuilder.BuildJsonPlayerSupport(player.GetToPlayerSupportStats(log, phase.Start, phase.End))).ToArray();
             var targetDamage1S = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count][];
@@ -84,7 +84,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 }
                 targetDamageDist[j] = targetDamageDistList;
                 dpsTargets[j] = phases.Select(phase => JsonStatisticsBuilder.BuildJsonDPS(player.GetDPSStats(target, log, phase.Start, phase.End))).ToArray();
-                statsTargets[j] = phases.Select(phase => JsonStatisticsBuilder.BuildJsonGameplayStats(player.GetGameplayStats(target, log, phase.Start, phase.End))).ToArray();
+                statsTargets[j] = phases.Select(phase => JsonStatisticsBuilder.BuildJsonGameplayStats(player.GetOffensiveStats(target, log, phase.Start, phase.End))).ToArray();
             }
             if (settings.RawFormatTimelineArrays)
             {

@@ -39,6 +39,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "cairn";
             Icon = "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
+            EncounterID |= 0x000001;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -54,7 +55,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(37989, 37989, InstantCastFinder.DefaultICD), // Cosmic Aura
+                new DamageCastFinder(37989, 37989), // Cosmic Aura
             };
         }
 
@@ -109,7 +110,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
                         if (facing != null)
                         {
-                            int initialDirection = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
+                            float initialDirection = ParserHelper.RadianToDegreeF(Math.Atan2(facing.Y, facing.X));
                             replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, initialDirection, width / 2, (start, start + preCastTime), "rgba(200, 0, 255, 0.1)", new AgentConnector(target)));
                             replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, initialDirection, width / 2, (start + preCastTime, start + preCastTime + initialHitDuration), "rgba(150, 0, 180, 0.5)", new AgentConnector(target)));
                             replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, initialDirection, width / 2, 360, (start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), "rgba(150, 0, 180, 0.5)", new AgentConnector(target)));
@@ -185,9 +186,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return combatData.GetSkills().Contains(38098) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return combatData.GetSkills().Contains(38098) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)

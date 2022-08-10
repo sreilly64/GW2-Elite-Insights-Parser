@@ -28,7 +28,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<long> DefBuffs { get; } = new List<long>();
         public List<long> Debuffs { get; } = new List<long>();
         public List<long> GearBuffs { get; } = new List<long>();
-        public List<long> FractalInstabilities { get; } = new List<long>();
+        public List<object[]> InstanceBuffs { get; } = new List<object[]>();
         public List<long> DmgModifiersItem { get; } = new List<long>();
         public List<long> DmgModifiersCommon { get; } = new List<long>();
         public Dictionary<string, List<long>> DmgModifiersPers { get; } = new Dictionary<string, List<long>>();
@@ -62,7 +62,8 @@ namespace GW2EIBuilders.HtmlModels
         public string ArcVersion { get; set; }
         public long EvtcVersion { get; set; }
         public ulong Gw2Build { get; set; }
-        public long FightID { get; set; }
+        public long TriggerID { get; set; }
+        public long EncounterID { get; set; }
         public string Parser { get; set; }
         public string RecordedBy { get; set; }
         public List<string> UploadLinks { get; set; }
@@ -77,7 +78,8 @@ namespace GW2EIBuilders.HtmlModels
             ArcVersion = log.LogData.ArcVersion;
             EvtcVersion = log.LogData.EvtcVersion;
             Gw2Build = log.LogData.GW2Build;
-            FightID = log.FightData.TriggerID;
+            TriggerID = log.FightData.TriggerID;
+            EncounterID = log.FightData.Logic.EncounterID;
             Parser = "Elite Insights " + parserVersion.ToString();
             RecordedBy = log.LogData.PoVName;
             UploadLinks = uploadLinks.ToList();
@@ -277,10 +279,10 @@ namespace GW2EIBuilders.HtmlModels
                 logData.GearBuffs.Add(gearBuff.ID);
                 usedBuffs[gearBuff.ID] = gearBuff;
             }
-            foreach (Buff fractalInstab in statistics.PresentFractalInstabilities)
+            foreach ((Buff instanceBuff, int stack) in log.FightData.Logic.GetInstanceBuffs(log))
             {
-                logData.FractalInstabilities.Add(fractalInstab.ID);
-                usedBuffs[fractalInstab.ID] = fractalInstab;
+                logData.InstanceBuffs.Add(new object[] { instanceBuff.ID, stack });
+                usedBuffs[instanceBuff.ID] = instanceBuff;
             }
         }
 
@@ -302,7 +304,7 @@ namespace GW2EIBuilders.HtmlModels
             log.UpdateProgressWithCancellationCheck("HTML: building Players");
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                logData.HasCommander = logData.HasCommander || actor.HasCommanderTag;
+                logData.HasCommander = logData.HasCommander || (actor is Player p && p.IsCommander(log));
                 logData.Players.Add(new PlayerDto(actor, log, ActorDetailsDto.BuildPlayerData(log, actor, usedSkills, usedBuffs)));
             }
 

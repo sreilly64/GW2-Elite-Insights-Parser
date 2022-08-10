@@ -20,6 +20,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "souleater";
             Icon = "https://wiki.guildwars2.com/images/thumb/2/24/Eater_of_Souls_%28Hall_of_Chains%29.jpg/194px-Eater_of_Souls_%28Hall_of_Chains%29.jpg";
             EncounterCategoryInformation.InSubCategoryOrder = 2;
+            EncounterID |= 0x000004;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -34,7 +35,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(48794, 48794, InstantCastFinder.DefaultICD), // Hungering Aura
+                new DamageCastFinder(48794, 48794), // Hungering Aura
             };
         }
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()

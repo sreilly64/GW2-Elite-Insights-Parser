@@ -9,14 +9,14 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
 {
-    internal class SooWon : FightLogic
+    internal class SooWon : OpenWorldLogic
     {
         public SooWon(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             { 
             new HitOnPlayerMechanic(TsunamiSlamOW, "Tsunami Slam", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.DarkRed), "Slam", "Soo-Won slams the ground in front of her creating a circular tsunami", "Tsunami Slam", 0),
-            new HitOnPlayerMechanic(VoidPurge, "Void Purge", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkPurple), "Acid", "Player took damage from an acid pool", "Acid Pool", 0),
+            new HitOnPlayerMechanic(VoidPurgeOW, "Void Purge", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkPurple), "Acid", "Player took damage from an acid pool", "Acid Pool", 0),
             new SkillOnPlayerMechanic(ClawSlapOW, "Claw Slap", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Orange), "Claw Slap", "Soo-Won swipes in an arc in front of her knocking players back", "Claw Slap", 0, (de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant) ^ de.HasDowned ^ de.HasKilled),
             new HitOnPlayerMechanic(TailSlap, "Tail Slap", new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Tail Slap", "Soo-Won slaps the majority of the platform, opposite her head, with her tail", "Tail Slap", 0),
             new HitOnPlayerMechanic(BiteOW, "Bite", new MechanicPlotlySetting(Symbols.Diamond,Colors.Orange), "Bite", "Soo-Won bites half the platform while swapping sides", "Bite", 0),
@@ -35,8 +35,7 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
             Extension = "soowon";
             Icon = "https://i.imgur.com/lcZGgBC.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
-            EncounterCategoryInformation.Category = EncounterCategory.FightCategory.OpenWorld;
-            EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.OpenWorld;
+            EncounterID |= 0x000401;
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -58,7 +57,7 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
             phases.AddRange(GetPhasesByInvul(log, new long[] { 757, 66242 }, mainTarget, true, true, 0,
                 log.FightData.FightEnd));
 
-            var phaseOffset = GetPhaseOffset(log, mainTarget);
+            int phaseOffset = GetPhaseOffset(log, mainTarget);
             InitPhases(phases, mainTarget, tailTarget, phaseOffset);
 
             return phases;
@@ -85,13 +84,13 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
         /// </returns>
         private static int GetPhaseOffset(ParsedEvtcLog log, AbstractSingleActor mainTarget)
         {
-            var initialHealth = mainTarget.GetCurrentHealthPercent(log, 0);
+            double initialHealth = mainTarget.GetCurrentHealthPercent(log, 0);
             Func<Func<BuffApplyEvent, bool>, BuffApplyEvent> targetBuffs =
                 log.CombatData.GetBuffData(mainTarget.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault;
             AbstractBuffEvent initialInvuln = targetBuffs(x => x.Initial && x.BuffID == Invulnerability757);
             AbstractBuffEvent initialDmgImmunity = targetBuffs(x => x.Initial && x.BuffID == SooWonSpearPhaseInvul); // spear phase
 
-            var offset = 0;
+            int offset = 0;
             if (initialHealth <= 80 && initialHealth > 60)
             {
                 offset = 2;

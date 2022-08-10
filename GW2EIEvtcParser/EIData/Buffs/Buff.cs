@@ -372,6 +372,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> FightSpecific = new List<Buff>
         {
                 // Generic
+                new Buff("Emboldened", Emboldened, Source.FightSpecific,BuffStackType.Stacking, 5, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/6/69/Emboldened.png" ),
                 new Buff("Spectral Agony", SpectralAgony, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/7/70/Spectral_Agony.png" ),
                 new Buff("Agony", Agony, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/b/be/Agony.png" ),
                 new Buff("Hamstrung", Hamstrung, Source.FightSpecific,BuffStackType.Stacking, 99, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png" ),
@@ -590,7 +591,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Arm Up",ArmUp , Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Fixation", Fixation, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 // Twin Largos
-                new Buff("Aquatic Detainment", AquaticDetainment , Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
+                new Buff("Aquatic Detainment", AquaticDetainmentEffect , Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
                 new Buff("Tidal Pool", TidalPool , Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
                 new Buff("Aquatic Aura (Kenut)",AquaticAuraKenut , Source.FightSpecific, BuffStackType.Stacking, 80, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/44/Expose_Weakness.png"),
                 new Buff("Aquatic Aura (Nikare)",AquaticAuraNikare , Source.FightSpecific, BuffStackType.Stacking, 80, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/fd/Fractured_%28effect%29.png"),
@@ -611,7 +612,7 @@ namespace GW2EIEvtcParser.EIData
                 //////////////////////////////////////////////
                 // Adina
                 new Buff("Pillar Pandemonium", PillarPandemonium, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other,"https://wiki.guildwars2.com/images/d/d9/Captain%27s_Inspiration.png"),
-                new Buff("Radiant Blindness", RadiantBlindness, Source.FightSpecific, BuffStackType.Queue, 25, BuffClassification.Debuff,"https://wiki.guildwars2.com/images/6/6c/Radiant_Blindness.png"),
+                new Buff("Radiant Blindness", RadiantBlindness, Source.FightSpecific, BuffStackType.Queue, 25, BuffClassification.Debuff,"https://wiki.guildwars2.com/images/c/c9/Persistently_Blinded.png"),
                 new Buff("Diamond Palisade (Damage)", DiamondPalisadeDamage, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
                 new Buff("Diamond Palisade", DiamondPalisade, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
                 new Buff("Eroding Curse", ErodingCurse, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other,"https://wiki.guildwars2.com/images/d/de/Toxic_Gas.png"),
@@ -739,6 +740,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Void Repulsion 2", VoidRepulsion2, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Aerial Defense", AerialDefense, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Void Immunity", VoidImmunity, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Void Empowerment", VoidEmpowerment, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Void Shell", VoidShell, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 //Open World Soo-Won
                 new Buff("Jade Tech Offensive Overcharge", JadeTechOffensiveOvercharge, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/d/d2/Jade_Tech_Offensive_Overcharge.png"),
@@ -862,6 +864,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Lump of Crystallized Nougat", LumpOfCrystallizedNougat, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/8/8f/Lump_of_Crystallized_Nougat.png"),
                 new Buff("Skale Venom (Consumable)", SkaleVenomConsumable, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/9/96/Skale_Venom_%28consumable%29.png"),
                 new Buff("Swift Moa Feather", SwiftMoaFeather, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/f/f0/Swift_Moa_Feather.png"),
+                //
+                new Buff("Reinforced Armor", ReinforcedArmor, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png", GW2Builds.June2022Balance, GW2Builds.EndOfLife),
         };
 
         internal static readonly List<Buff> Writs = new List<Buff>

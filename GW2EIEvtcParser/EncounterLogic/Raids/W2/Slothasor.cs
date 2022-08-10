@@ -31,6 +31,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "sloth";
             Icon = "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
+            EncounterID |= 0x000001;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -57,7 +58,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(VolatileAura, VolatileAura, InstantCastFinder.DefaultICD), // Volatile Aura
+                new DamageCastFinder(VolatileAura, VolatileAura), // Volatile Aura
             };
         }
 

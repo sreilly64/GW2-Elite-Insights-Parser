@@ -10,11 +10,14 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
+            new EffectCastFinder(BulwarkGyro, EffectGUIDs.ScrapperBulwarkGyro).UsingChecker((evt, log) => evt.Src.Spec == Spec.Scrapper),
+            new EffectCastFinder(PurgeGyro, EffectGUIDs.ScrapperPurgeGyro).UsingChecker((evt, log) => evt.Src.Spec == Spec.Scrapper),
+            new EffectCastFinder(DefenseField, EffectGUIDs.ScrapperDefenseField).UsingChecker((evt, log) => evt.Src.Spec == Spec.Scrapper),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(new long[] { Swiftness, Superspeed, Stability}, "Object in Motion", "5% under swiftness/superspeed/stability, accumulative", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Scrapper, ByMultiPresence, "https://wiki.guildwars2.com/images/d/da/Object_in_Motion.png", GW2Builds.July2019Balance, GW2Builds.EndOfLife, DamageModifierMode.All)
+            new BuffDamageModifier(new long[] { Swiftness, Superspeed, Stability}, "Object in Motion", "5% under swiftness/superspeed/stability, accumulative", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Scrapper, ByMultiPresence, "https://wiki.guildwars2.com/images/d/da/Object_in_Motion.png", DamageModifierMode.All).WithBuilds( GW2Builds.July2019Balance)
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

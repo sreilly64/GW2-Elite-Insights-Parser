@@ -12,13 +12,13 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(LegendaryAllianceStanceSkill, LegendaryAllianceStanceEffect, EIData.InstantCastFinder.DefaultICD), // Legendary Alliance Stance
-            //new BuffGainCastFinder(LegendaryAllianceStanceUWSkill, LegendaryAllianceStanceEffect, EIData.InstantCastFinder.DefaultICD), // Legendary Alliance Stance (UW)
-            new DamageCastFinder(CallOfTheAlliance, CallOfTheAlliance, EIData.InstantCastFinder.DefaultICD), // Call of the Alliance
-            new BuffGainCastFinder(UrnOfSaintViktorSkill, UrnOfSaintViktorEffect, EIData.InstantCastFinder.DefaultICD), // Urn of Saint Viktor
-            new BuffGainCastFinder(DeathDropSkill, ForerunnerOfDeath, EIData.InstantCastFinder.DefaultICD), // Forerunner of Death (Death Drop) 
-            new BuffGainCastFinder(SaintsShieldSkill, SaintOfzuHeltzer, EIData.InstantCastFinder.DefaultICD), // Saint of zu Heltzer (Saint's Shield)
-            //new EXTHealingCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD), // Redemptor's Sermon
+            new BuffGainCastFinder(LegendaryAllianceStanceSkill, LegendaryAllianceStanceEffect), // Legendary Alliance Stance
+            //new BuffGainCastFinder(LegendaryAllianceStanceUWSkill, LegendaryAllianceStanceEffect), // Legendary Alliance Stance (UW)
+            new DamageCastFinder(CallOfTheAlliance, CallOfTheAlliance), // Call of the Alliance
+            new BuffGainCastFinder(UrnOfSaintViktorSkill, UrnOfSaintViktorEffect), // Urn of Saint Viktor
+            new BuffGainCastFinder(DeathDropSkill, ForerunnerOfDeath), // Forerunner of Death (Death Drop) 
+            new BuffGainCastFinder(SaintsShieldSkill, SaintOfzuHeltzer), // Saint of zu Heltzer (Saint's Shield)
+            //new EXTHealingCastFinder(-1, -1), // Redemptor's Sermon
         };
 
         private static readonly HashSet<long> _dodges = new HashSet<long>
@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(ForerunnerOfDeath, "Forerunner of Death", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, "https://wiki.guildwars2.com/images/9/95/Forerunner_of_Death.png", GW2Builds.EODBeta2, GW2Builds.EndOfLife, DamageModifierMode.All),
+            new BuffDamageModifier(ForerunnerOfDeath, "Forerunner of Death", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, "https://wiki.guildwars2.com/images/9/95/Forerunner_of_Death.png", DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta2),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

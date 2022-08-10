@@ -12,9 +12,9 @@ namespace GW2EIEvtcParser.EIData
         /////////////////////
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffLossCastFinder(GunsaberSheath, GunsaberMode, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta2, GW2Builds.EndOfLife), // Gunsaber sheath
-            new BuffGainCastFinder(Gunsaber, GunsaberMode, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta2, GW2Builds.EndOfLife), // Gunsaber         
-            new DamageCastFinder(UnseenSword, UnseenSword, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta2, GW2Builds.EndOfLife), // Unseen Sword
+            new BuffLossCastFinder(GunsaberSheath, GunsaberMode).WithBuilds(GW2Builds.EODBeta2), // Gunsaber sheath
+            new BuffGainCastFinder(Gunsaber, GunsaberMode).WithBuilds(GW2Builds.EODBeta2), // Gunsaber         
+            new DamageCastFinder(UnseenSword, UnseenSword).WithBuilds(GW2Builds.EODBeta2), // Unseen Sword
         };
 
         private static readonly HashSet<long> _gunsaberForm = new HashSet<long>
@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(FierceAsFire, "Fierce as Fire", "1%", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Bladesworn, ByStack, "https://wiki.guildwars2.com/images/8/8e/Fierce_as_Fire.png", GW2Builds.EODBeta4, GW2Builds.EndOfLife, DamageModifierMode.All),
+            new BuffDamageModifier(FierceAsFire, "Fierce as Fire", "1%", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Bladesworn, ByStack, "https://wiki.guildwars2.com/images/8/8e/Fierce_as_Fire.png", DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
@@ -40,6 +40,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Fierce as Fire", FierceAsFire, Source.Bladesworn, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8e/Fierce_as_Fire.png"),
             new Buff("Stim State", StimState, Source.Bladesworn, BuffClassification.Other,"https://wiki.guildwars2.com/images/a/ad/Combat_Stimulant.png"),
             new Buff("Guns and Glory", GunsAndGlory, Source.Bladesworn, BuffStackType.Queue, 9, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/72/Guns_and_Glory.png"),
+            new Buff("Tactical Reload", TacticalReload, Source.Bladesworn, BuffClassification.Other,"https://wiki.guildwars2.com/images/4/47/Tactical_Reload.png"),
+            new Buff("Overcharged Cartridges", OverchargedCartridges, Source.Bladesworn, BuffStackType.Stacking, 25, BuffClassification.Other,"https://wiki.guildwars2.com/images/0/0a/Overcharged_Cartridges.png"),
         };
 
 

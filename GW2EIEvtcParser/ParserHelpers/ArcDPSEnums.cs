@@ -323,6 +323,19 @@ namespace GW2EIEvtcParser
             return Enum.IsDefined(typeof(SkillAction), bt) ? (SkillAction)bt : SkillAction.Unknown;
         }
 
+        // Content local
+
+        public enum ContentLocal : byte
+        {
+            Effect = 0,
+            Marker = 1,
+            Unknown
+        }
+        internal static ContentLocal GetContentLocal(byte bt)
+        {
+            return bt < (byte)ContentLocal.Unknown ? (ContentLocal)bt : ContentLocal.Unknown;
+        }
+
         // Friend of for
 
         public enum IFF : byte
@@ -362,6 +375,7 @@ namespace GW2EIEvtcParser
         private const int TheDragonVoidJormag = -21;
         private const int TheDragonVoidPrimordus = -22;
         private const int PushableVoidAmalgamate = -23;
+        private const int DragonBodyVoidAmalgamate = -24;
 
 
         //
@@ -579,6 +593,7 @@ namespace GW2EIEvtcParser
             ScarletPhantom1 = 24404,
             ScarletPhantomBreakbar = 23656,
             ScarletPhantomHP = 24431,
+            ScarletPhantomHP2 = 25262,
             ScarletPhantom2 = 24396,
             // Xunlai Jade Junkyard
             Ankka = 24634,
@@ -605,8 +620,9 @@ namespace GW2EIEvtcParser
             SpiritOfDestruction = 23961,
             // Void Amalgamate
             PushableVoidAmalgamate = ArcDPSEnums.PushableVoidAmalgamate,
-            VoidAmalgamate1 = 24375,
-            VoidAmalgamate2 = 23956,
+            VoidAmalgamate = 24375,
+            KillableVoidAmalgamate = 23956,
+            DragonBodyVoidAmalgamate = ArcDPSEnums.DragonBodyVoidAmalgamate,
             VoidTangler = 25138,
             VoidColdsteel = 23945,
             VoidAbomination = 23936,
@@ -622,6 +638,7 @@ namespace GW2EIEvtcParser
             VoidWarforged2 = 24855,
             VoidStormseer = 24677,
             VoidMelter = 24223,
+            VoidGoliath = 24761,
             // Freezie
             FreeziesFrozenHeart = 21328,
             // Fractals
@@ -827,6 +844,7 @@ namespace GW2EIEvtcParser
         public enum MinionID : int
         {
             RuneJaggedHorror = 21314,
+            RuneMarkIGolem = 8837,
             //
             IllusionarySwordsman = 6487,
             IllusionaryBerserker = 6535,

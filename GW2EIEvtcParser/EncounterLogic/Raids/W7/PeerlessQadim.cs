@@ -38,6 +38,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "prlqadim";
             Icon = "https://wiki.guildwars2.com/images/8/8b/Mini_Qadim_the_Peerless.png";
             EncounterCategoryInformation.InSubCategoryOrder = 1;
+            EncounterID |= 0x000003;
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
@@ -56,7 +57,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(56038, 56038, InstantCastFinder.DefaultICD), // Unbearable Power
+                new DamageCastFinder(56038, 56038), // Unbearable Power
             };
         }
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
@@ -210,7 +211,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && position != null)
                         {
-                            int direction = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
+                            float direction = ParserHelper.RadianToDegreeF(Math.Atan2(facing.Y, facing.X));
                             replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, roadLength, roadWidth, direction, roadLength / 2 + 200, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new PositionConnector(position)));
                             for (int i = 0; i < subdivisions; i++)
                             {
@@ -452,14 +453,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Peerless Qadim not found");
             }
-            return (target.GetHealth(combatData) > 48e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return (target.GetHealth(combatData) > 48e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }
 }

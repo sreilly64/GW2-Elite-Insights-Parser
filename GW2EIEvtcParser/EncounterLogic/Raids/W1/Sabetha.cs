@@ -52,6 +52,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "sab";
             Icon = "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
             EncounterCategoryInformation.InSubCategoryOrder = 2;
+            EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -161,7 +162,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
                         if (facing != null)
                         {
-                            int initialDirection = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
+                            float initialDirection = ParserHelper.RadianToDegreeF(Math.Atan2(facing.Y, facing.X));
                             replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, initialDirection, width / 2, (start, start + preCastTime), "rgba(255, 100, 0, 0.2)", new AgentConnector(target)));
                             replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, initialDirection, width / 2, 360, (start + preCastTime, start + preCastTime + duration), "rgba(255, 50, 0, 0.5)", new AgentConnector(target)));
                         }

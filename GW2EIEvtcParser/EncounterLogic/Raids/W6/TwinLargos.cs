@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(53018, "Sea Swell", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkPurple), "Wave","Sea Swell (Shockwave)", "Shockwave",0),
             new HitOnPlayerMechanic(53130, "Geyser", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Teal), "KB/Launch","Geyser (Launching Aoes)", "Launch Field",0),
             new PlayerBuffApplyMechanic(TidalPool, "Tidal Pool", new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Poison","Expanding Water Field", "Water Poison",0),
-            new HitOnPlayerMechanic(AquaticDetainment, "Aquatic Detainment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",6000),
+            new HitOnPlayerMechanic(AquaticDetainmentHit, "Aquatic Detainment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",6000),
             new HitOnPlayerMechanic(52130, "Aquatic Vortex", new MechanicPlotlySetting(Symbols.StarSquareOpenDot,Colors.LightBlue), "Tornado","Aquatic Vortex (Water Tornados)", "Tornado",0),
             new HitOnPlayerMechanic(51965, "Vapor Jet", new MechanicPlotlySetting(Symbols.Square,Colors.Pink), "Steal","Vapor Jet (Boon Steal)", "Boon Steal",0),
             new EnemyBuffApplyMechanic(EnragedTwinLargos, "Enraged", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Red), "Enrage","Enraged", "Enrage",0),
@@ -33,6 +33,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "twinlargos";
             Icon = "https://i.imgur.com/6O5MT7v.png";
             EncounterCategoryInformation.InSubCategoryOrder = 1;
+            EncounterID |= 0x000002;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -57,8 +58,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(52779, 52779, InstantCastFinder.DefaultICD), // Nikare Aquatic Aura
-                new DamageCastFinder(52005, 52005, InstantCastFinder.DefaultICD), // Kenut Aquatic Aura
+                new DamageCastFinder(52779, 52779), // Nikare Aquatic Aura
+                new DamageCastFinder(52005, 52005), // Kenut Aquatic Aura
             };
         }
 
@@ -324,7 +325,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // Bubble (Aquatic Detainment)
-            List<AbstractBuffEvent> bubble = GetFilteredList(log.CombatData, AquaticDetainment, p, true, true);
+            List<AbstractBuffEvent> bubble = GetFilteredList(log.CombatData, AquaticDetainmentEffect, p, true, true);
             int bubbleStart = 0;
             foreach (AbstractBuffEvent c in bubble)
             {
@@ -346,7 +347,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return "Twin Largos";
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
             AbstractSingleActor kenut = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Kenut);
@@ -356,9 +357,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             if (kenut != null)
             {
-                return kenut.GetHealth(combatData) > 16e6 || nikare.GetHealth(combatData) > 18e6 ? FightData.CMStatus.CM : FightData.CMStatus.NoCM; // Kenut or nikare hp
+                return kenut.GetHealth(combatData) > 16e6 || nikare.GetHealth(combatData) > 18e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal; // Kenut or nikare hp
             }
-            return (nikare.GetHealth(combatData) > 18e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM; //Health of Nikare
+            return (nikare.GetHealth(combatData) > 18e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal; //Health of Nikare
         }
     }
 }

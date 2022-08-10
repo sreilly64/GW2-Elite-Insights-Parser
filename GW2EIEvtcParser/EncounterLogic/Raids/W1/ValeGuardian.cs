@@ -36,6 +36,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "vg";
             Icon = "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
+            EncounterID |= 0x000001;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -50,10 +51,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(MagicAuraValeGuardian, MagicAuraValeGuardian, InstantCastFinder.DefaultICD),
-                new DamageCastFinder(MagicAuraRedGuardian, MagicAuraRedGuardian, InstantCastFinder.DefaultICD),
-                new DamageCastFinder(MagicAuraBlueGuardian, MagicAuraBlueGuardian, InstantCastFinder.DefaultICD),
-                new DamageCastFinder(MagicAuraGreenGuardian, MagicAuraGreenGuardian, InstantCastFinder.DefaultICD),
+                new DamageCastFinder(MagicAuraValeGuardian, MagicAuraValeGuardian),
+                new DamageCastFinder(MagicAuraRedGuardian, MagicAuraRedGuardian),
+                new DamageCastFinder(MagicAuraBlueGuardian, MagicAuraBlueGuardian),
+                new DamageCastFinder(MagicAuraGreenGuardian, MagicAuraGreenGuardian),
             };
         }
 

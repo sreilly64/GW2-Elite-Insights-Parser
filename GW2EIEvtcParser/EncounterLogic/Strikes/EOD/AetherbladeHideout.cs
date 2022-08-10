@@ -5,11 +5,12 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class AetherbladeHideout : CanthaStrike
+    internal class AetherbladeHideout : EODStrike
     {
         public AetherbladeHideout(int triggerID) : base(triggerID)
         {
@@ -30,6 +31,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Icon = "https://i.imgur.com/UZmW8Sd.png";
             Extension = "aetherhide";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
+            EncounterID |= 0x000001;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -49,6 +51,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM,
                 (int)ArcDPSEnums.TrashID.ScarletPhantomBreakbar,
                 (int)ArcDPSEnums.TrashID.ScarletPhantomHP,
+                (int)ArcDPSEnums.TrashID.ScarletPhantomHP2,
             };
         }
 
@@ -129,6 +132,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        private IEnumerable<AbstractSingleActor> GetHPScarletPhantoms(PhaseData phase)
+        {
+            return Targets.Where(x => (x.ID == (int)ArcDPSEnums.TrashID.ScarletPhantomHP || x.ID == (int)ArcDPSEnums.TrashID.ScarletPhantomHP2) && (phase.InInterval(x.FirstAware) || phase.InInterval(x.LastAware)));
+        }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
@@ -161,12 +168,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var mainPhase = new PhaseData(0, maiTrinEnd, "Mai Trin");
                 mainPhase.AddTarget(maiTrin);
                 phases.Add(mainPhase);
-                List<PhaseData> maiPhases = GetPhasesByInvul(log, 38793, maiTrin, false, true, maiTrinStart, maiTrinEnd);
+                List<PhaseData> maiPhases = GetPhasesByInvul(log, 38793, maiTrin, true, true, maiTrinStart, maiTrinEnd);
                 for (int i = 0; i < maiPhases.Count; i++)
                 {
                     PhaseData subPhase = maiPhases[i];
-                    subPhase.Name = "Mai Trin Phase " + (i + 1);
-                    subPhase.AddTarget(maiTrin);
+                    if ((i % 2) == 0)
+                    {
+                        subPhase.Name = "Mai Trin Phase " + ((i / 2) + 1);
+                        subPhase.AddTarget(maiTrin);
+                    } 
+                    else
+                    {
+                        subPhase.Name = "Mai Trin Split Phase " + ((i / 2) + 1);
+                        subPhase.AddTargets(GetHPScarletPhantoms(subPhase));
+                    }
                 }
                 phases.AddRange(maiPhases);
             }
@@ -176,12 +191,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var phase = new PhaseData(echoStart, log.FightData.FightEnd, "Echo of Scarlet Briar");
                 phase.AddTarget(echoOfScarlet);
                 phases.Add(phase);
-                List<PhaseData> echoPhases = GetPhasesByInvul(log, 38793, echoOfScarlet, false, true, echoStart, log.FightData.FightEnd);
+                List<PhaseData> echoPhases = GetPhasesByInvul(log, 38793, echoOfScarlet, true, true, echoStart, log.FightData.FightEnd);
                 for (int i = 0; i < echoPhases.Count; i++)
                 {
                     PhaseData subPhase = echoPhases[i];
-                    subPhase.Name = "Echo Phase " + (i + 1);
-                    subPhase.AddTarget(echoOfScarlet);
+                    if ((i % 2) == 0)
+                    {
+                        subPhase.Name = "Echo Phase " + ((i / 2) + 1);
+                        subPhase.AddTarget(echoOfScarlet);
+                    }
+                    else
+                    {
+                        subPhase.Name = "Echo Split Phase " + ((i / 2) + 1);
+                        subPhase.AddTargets(GetHPScarletPhantoms(subPhase));
+                    }
                 }
                 phases.AddRange(echoPhases);
             }
@@ -199,6 +222,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     maiTrins[i].OverrideID(ArcDPSEnums.TargetID.DummyMaiTrinStrike);
                 }
                 agentData.Refresh();
+            }
+            if (agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM).Count + agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM).Count == 0)
+            {
+                agentData.AddCustomNPCAgent(long.MaxValue, long.MaxValue, "Echo of Scarlet Briar", Spec.NPC, (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM, false);
+                agentData.AddCustomNPCAgent(long.MaxValue, long.MaxValue, "Echo of Scarlet Briar", Spec.NPC, (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM, false);
             }
             ComputeFightTargets(agentData, combatData, extensions);
             var echoesOfScarlet = Targets.Where(x => x.ID == (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM || x.ID == (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM).ToList();
@@ -218,6 +246,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         target.OverrideName("Elite " + target.Character + " CC");
                         break;
                     case (int)ArcDPSEnums.TrashID.ScarletPhantomHP:
+                    case (int)ArcDPSEnums.TrashID.ScarletPhantomHP2:
                         target.OverrideName("Elite " + target.Character + " HP");
                         break;
                     default:
@@ -226,14 +255,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MaiTrinStrike);
             if (maiTrin == null)
             {
                 throw new MissingKeyActorsException("Mai Trin not found");
             }
-            return maiTrin.GetHealth(combatData) > 8e6 ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return maiTrin.GetHealth(combatData) > 8e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }
 }
