@@ -325,6 +325,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Sigil of the Stars", SigilOfTheStars, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, "https://wiki.guildwars2.com/images/d/dc/Superior_Sigil_of_the_Stars.png"),
                 new Buff("Sigil of Severance", SigilOfSeverance, Source.Gear, BuffClassification.Gear, "https://wiki.guildwars2.com/images/c/c2/Superior_Sigil_of_Severance.png"),
                 new Buff("Sigil of Doom", SigilOfDoom, Source.Gear, BuffClassification.Gear, "https://wiki.guildwars2.com/images/6/67/Superior_Sigil_of_Doom.png"),
+                new Buff("Sigil of Cruelty", SigilOfCruelty, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, "https://wiki.guildwars2.com/images/2/26/Superior_Sigil_of_Cruelty.png"),
         };
 
         internal static readonly List<Buff> FractalInstabilities = new List<Buff>()

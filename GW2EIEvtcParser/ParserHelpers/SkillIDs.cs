@@ -472,6 +472,7 @@ namespace GW2EIEvtcParser
         public const long WaterElementalSummoned = 25493;
         public const long AirElementalSummoned = 25496;
         public const long LightAura = 25518;
+        public const long SigilOfCruelty = 25526;
         public const long SharpeningSkull = 25630;
         public const long LumpOfCrystallizedNougat = 25631;
         public const long FlaskOfPumpkinOil = 25632;
